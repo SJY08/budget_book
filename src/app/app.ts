@@ -7,7 +7,6 @@ import { NavComponent } from './shared/nav/nav';
   standalone: true,
   imports: [RouterOutlet, NavComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('budget-book');
