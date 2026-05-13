@@ -1,1 +1,43 @@
-<p>transaction-item works!</p>
+<div class="flex items-center justify-between group">
+  <div class="flex items-center gap-3">
+    <app-category-icon [iconName]="category().iconName" [color]="category().color" [size]="18" />
+    <div>
+      <p class="font-medium text-text-primary">
+        {{ transaction().memo || category().name }}
+      </p>
+      <p class="text-xs text-text-tertiary">{{ category().name }}</p>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <p
+      class="font-semibold"
+      [class.text-success]="transaction().type === 'income'"
+      [class.text-text-primary]="transaction().type === 'expense'"
+    >
+      {{ transaction().type === 'income' ? '+' : '-' }}{{ transaction().amount | krw }}
+    </p>
+
+    @if (showDelete()) {
+      <button
+        (click)="deleted.emit(transaction().id)"
+        class="p-1.5 text-gray-300 hover:text-danger hover:bg-red-50 rounded-full transition-colors"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M3 6h18" />
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+        </svg>
+      </button>
+    }
+  </div>
+</div>
