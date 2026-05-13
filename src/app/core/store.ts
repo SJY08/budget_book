@@ -68,7 +68,7 @@ export class StoreService {
   }
 
   getCategoryById(id: string) {
-    return this.categories().find((c) => c.id !== id);
+    return this.categories().find((c) => c.id === id);
   }
 
   private load<T>(key: string, fallback: T): T {
