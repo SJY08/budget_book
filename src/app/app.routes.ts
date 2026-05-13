@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-// import { DashboardComponent } from './pages/dashboard/dashboard';
+import { DashboardComponent } from './pages/dashboard/dashboard';
 // import { AddTransactionComponent } from './pages/add-transaction/add-transaction';
 // import { TransactionsComponent } from './pages/transactions/transactions';
 // import { AnalyticsComponent } from './pages/analytics/analytics';
@@ -8,7 +8,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  //   { path: 'home', component: DashboardComponent },
+  { path: 'home', component: DashboardComponent },
   //   { path: 'add', component: AddTransactionComponent },
   //   { path: 'transactions', component: TransactionsComponent },
   //   { path: 'analytics', component: AnalyticsComponent },
