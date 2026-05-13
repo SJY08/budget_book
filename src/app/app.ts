@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { BottomNavComponent } from './shared/bottom-nav/bottom-nav';
 
 @Component({
@@ -9,5 +9,9 @@ import { BottomNavComponent } from './shared/bottom-nav/bottom-nav';
   templateUrl: './app.html',
 })
 export class App {
-  protected readonly title = signal('budget_book');
+  router = inject(Router);
+
+  isAddPage() {
+    return this.router.url === '/add';
+  }
 }

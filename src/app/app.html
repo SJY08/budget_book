@@ -5,6 +5,8 @@
     <main class="flex-1 overflow-y-auto pb-24">
       <router-outlet />
     </main>
-    <app-bottom-nav />
+    @if (!isAddPage()) {
+      <app-bottom-nav />
+    }
   </div>
 </div>
