@@ -1,0 +1,8 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-category-detail',
+  imports: [],
+  templateUrl: './category-detail.html',
+})
+export class CategoryDetail {}
