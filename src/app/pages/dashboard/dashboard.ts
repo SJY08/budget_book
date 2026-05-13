@@ -43,7 +43,7 @@ export class DashboardComponent {
     const expenses = this.monthTransactions().filter((t) => t.type === 'expense');
     const totals: Record<string, number> = {};
     expenses.forEach((t) => {
-      totals[t.categoryId] = totals[t.categoryId || 0] + t.amount;
+      totals[t.categoryId] = (totals[t.categoryId] || 0) + t.amount;
     });
     return Object.entries(totals)
       .map(([id, amount]) => ({
