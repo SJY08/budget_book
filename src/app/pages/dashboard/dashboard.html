@@ -1,8 +1,6 @@
 <div class="flex flex-col min-h-full bg-background">
-  <!-- 헤더 -->
   <div class="bg-surface px-6 pt-8 pb-4 rounded-b-3xl shadow-sm z-10">
     <div class="flex items-center justify-between mb-6">
-      <!-- ← 이전달 -->
       <button (click)="prevMonth()" class="p-2 rounded-full hover:bg-gray-100 text-text-secondary">
         <svg
           width="24"
@@ -20,7 +18,6 @@
 
       <h1 class="text-xl font-bold text-text-primary">{{ monthLabel() }}</h1>
 
-      <!-- → 다음달 -->
       <button (click)="nextMonth()" class="p-2 rounded-full hover:bg-gray-100 text-text-secondary">
         <svg
           width="24"
@@ -53,7 +50,6 @@
   </div>
 
   <div class="px-5 py-6 space-y-6">
-    <!-- 가장 많이 쓴 카테고리 -->
     @if (topCategory()) {
       <div class="bg-surface rounded-2xl p-5 shadow-soft flex items-center justify-between">
         <div>
@@ -74,7 +70,6 @@
       </div>
     }
 
-    <!-- 카테고리별 지출 -->
     @if (categoryTotals().length > 0) {
       <div class="bg-surface rounded-2xl p-5 shadow-soft">
         <div class="flex justify-between items-center mb-4">
@@ -99,7 +94,6 @@
                 </div>
                 <p class="font-semibold text-text-primary">{{ item.amount | krw }}</p>
               </div>
-              <!-- 프로그레스 바 -->
               <div class="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
                 <div
                   class="h-full rounded-full transition-all duration-700"
@@ -113,7 +107,6 @@
       </div>
     }
 
-    <!-- 최근 거래 -->
     <div class="bg-surface rounded-2xl p-5 shadow-soft">
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-text-primary">최근 거래</h3>
