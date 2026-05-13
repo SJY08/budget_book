@@ -1,1 +1,44 @@
-<p>transactions works!</p>
+<div class="flex flex-col min-h-full bg-background pb-20">
+  <div class="bg-surface px-6 pt-12 pb-6 rounded-b-3xl shadow-sm sticky top-0 z-10">
+    <h1 class="text-2xl font-bold text-text-primary">전체 내역</h1>
+    <p class="text-text-secondary mt-1">모든 수입과 지출을 확인하세요.</p>
+  </div>
+
+  <div class="p-5 space-y-6">
+    @if (groupedTransactions().length === 0) {
+      <div class="text-center py-20 text-text-tertiary">
+        <p>기록된 내역이 없습니다.</p>
+      </div>
+    } @else {
+      @for (group of groupedTransactions(); track group.date) {
+        <div class="bg-surface rounded-2xl p-5 shadow-soft">
+          <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
+            <h3 class="font-bold text-text-secondary text-sm">
+              {{ formatDate(group.date) }}
+            </h3>
+            <span
+              class="text-sm font-bold"
+              [class.text-success]="group.dayTotal > 0"
+              [class.text-text-primary]="group.dayTotal <= 0"
+            >
+              {{ group.dayTotal > 0 ? '+' : '' }}{{ group.dayTotal | krw }}
+            </span>
+          </div>
+
+          <div class="space-y-4">
+            @for (t of group.items; track t.id) {
+              @if (store.getCategoryById(t.categoryId); as cat) {
+                <app-transaction-item
+                  [transaction]="t"
+                  [category]="cat"
+                  [showDelete]="true"
+                  (deleted)="deleteTransaction($event)"
+                />
+              }
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
