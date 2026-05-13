@@ -1,1 +1,154 @@
-<p>analytics works!</p>
+<div class="flex flex-col min-h-full bg-background pb-8">
+  <div class="bg-surface px-6 pt-12 pb-6 rounded-b-3xl shadow-sm sticky top-0 z-10">
+    <h1 class="text-2xl font-bold text-text-primary mb-1">분석</h1>
+    <p class="text-text-secondary mb-5">지출 흐름과 카테고리를 한눈에 확인하세요.</p>
+
+    <div class="flex items-center justify-between bg-gray-50 rounded-xl px-2 py-1">
+      <button (click)="prevMonth()" class="p-2 rounded-full text-text-secondary hover:bg-gray-100">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
+      <span class="font-bold text-text-primary">{{ monthLabel() }}</span>
+      <button (click)="nextMonth()" class="p-2 rounded-full text-text-secondary hover:bg-gray-100">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="p-5 space-y-6">
+    <div class="grid grid-cols-2 gap-3">
+      <div class="bg-surface rounded-2xl p-4 shadow-soft">
+        <div class="flex items-center gap-1.5 text-text-secondary text-xs font-medium mb-1">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 5v14M5 12l7 7 7-7" />
+          </svg>
+          지출
+        </div>
+        <p class="text-lg font-bold text-text-primary">{{ totalExpense() | krw }}</p>
+      </div>
+      <div class="bg-surface rounded-2xl p-4 shadow-soft">
+        <div class="flex items-center gap-1.5 text-text-secondary text-xs font-medium mb-1">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 19V5M5 12l7-7 7 7" />
+          </svg>
+          수입
+        </div>
+        <p class="text-lg font-bold text-text-primary">{{ totalIncome() | krw }}</p>
+      </div>
+      <div class="bg-surface rounded-2xl p-4 shadow-soft col-span-2">
+        <p class="text-text-secondary text-xs font-medium mb-1">이번 달 잔액</p>
+        <p
+          class="text-xl font-bold"
+          [class.text-success]="net() >= 0"
+          [class.text-danger]="net() < 0"
+        >
+          {{ net() >= 0 ? '+' : '' }}{{ net() | krw }}
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-surface rounded-2xl p-5 shadow-soft">
+      <h3 class="font-bold text-text-primary mb-1">최근 6개월 지출 추이</h3>
+      @if (comparisonText()) {
+        <p
+          class="text-sm font-medium mb-5"
+          [class.text-success]="comparisonPositive()"
+          [class.text-danger]="!comparisonPositive()"
+        >
+          {{ comparisonText() }}
+        </p>
+      }
+
+      <div class="flex items-end gap-2 h-40 mt-4">
+        @for (d of trendData(); track d.label) {
+          <div class="flex-1 flex flex-col items-center gap-1">
+            <div class="w-full flex items-end justify-center" style="height: 120px">
+              <div
+                class="w-full rounded-t-lg transition-all duration-500"
+                [style.height.%]="maxExpense() > 0 ? (d.expense / maxExpense()) * 100 : 0"
+                [style.background-color]="d.isCurrent ? '#3182f6' : '#cdd5df'"
+              ></div>
+            </div>
+            <span class="text-[10px] text-text-tertiary">{{ d.label }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (expenseByCategory().length > 0) {
+      <div class="bg-surface rounded-2xl p-5 shadow-soft">
+        <h3 class="font-bold text-text-primary mb-4">카테고리별 지출</h3>
+
+        <div class="space-y-4">
+          @for (item of expenseByCategory(); track item.category!.id; let i = $index) {
+            <a
+              [routerLink]="['/category', item.category!.id]"
+              class="flex items-center gap-3 py-1 group"
+            >
+              <span class="text-text-tertiary font-bold text-sm w-4">{{ i + 1 }}</span>
+              <app-category-icon
+                [iconName]="item.category!.iconName"
+                [color]="item.category!.color"
+                [size]="16"
+              />
+              <span class="flex-1 font-medium text-text-primary group-hover:text-primary truncate">
+                {{ item.category!.name }}
+              </span>
+              <div class="text-right shrink-0">
+                <p class="font-semibold text-text-primary text-sm">{{ item.amount | krw }}</p>
+                <p class="text-xs text-text-tertiary">{{ item.percentage.toFixed(0) }}%</p>
+              </div>
+            </a>
+
+            <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden -mt-2">
+              <div
+                class="h-full rounded-full"
+                [style.width.%]="item.percentage"
+                [style.background-color]="item.category!.color"
+              ></div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="bg-surface rounded-2xl p-8 shadow-soft text-center text-text-tertiary">
+        이번 달 지출 내역이 없습니다.
+      </div>
+    }
+  </div>
+</div>
