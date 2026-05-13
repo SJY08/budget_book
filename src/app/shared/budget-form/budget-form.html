@@ -47,7 +47,7 @@
   <div class="mb-3">
     <label class="text-xs text-gray-400 mb-1 block">카테고리</label>
     <div class="flex flex-wrap gap-2">
-      @for (cat of budgetService.categorise(); track cat.id) {
+      @for (cat of budgetService.categories(); track cat.id) {
         <button
           (click)="categoryId.set(cat.id)"
           [class]="
@@ -73,10 +73,10 @@
     />
   </div>
 
-  <buttion
+  <button
     (click)="submit()"
     class="w-full py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-semibold text-sm transition"
   >
-    저장</buttion
-  >
+    저장
+  </button>
 </div>
