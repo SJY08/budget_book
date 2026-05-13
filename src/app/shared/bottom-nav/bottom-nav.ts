@@ -1,8 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-bottom-nav',
-  imports: [],
+  standalone: true,
+  imports: [RouterLink],
   templateUrl: './bottom-nav.html',
 })
-export class BottomNav {}
+export class BottomNavComponent {
+  router = inject(Router);
+
+  isActive(path: string) {
+    return this.router.url.includes(path);
+  }
+}

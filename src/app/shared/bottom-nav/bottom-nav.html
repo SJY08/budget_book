@@ -1,1 +1,131 @@
-<p>bottom-nav works!</p>
+<nav
+  class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-surface border-t border-gray-100 pt-2 px-2 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.02)]"
+>
+  <div class="flex justify-around items-center relative">
+    <!-- 홈 -->
+    <a
+      routerLink="/home"
+      class="flex flex-col items-center justify-center w-14 h-12 transition-colors"
+      [class.text-primary]="isActive('/home')"
+      [class.text-text-tertiary]="!isActive('/home')"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        <polyline points="9 22 9 12 15 12 15 22" />
+      </svg>
+      <span class="text-[10px] font-medium mt-1">홈</span>
+    </a>
+
+    <!-- 내역 -->
+    <a
+      routerLink="/transactions"
+      class="flex flex-col items-center justify-center w-14 h-12 transition-colors"
+      [class.text-primary]="isActive('/transactions')"
+      [class.text-text-tertiary]="!isActive('/transactions')"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="8" x2="21" y1="6" y2="6" />
+        <line x1="8" x2="21" y1="12" y2="12" />
+        <line x1="8" x2="21" y1="18" y2="18" />
+        <line x1="3" x2="3.01" y1="6" y2="6" />
+        <line x1="3" x2="3.01" y1="12" y2="12" />
+        <line x1="3" x2="3.01" y1="18" y2="18" />
+      </svg>
+      <span class="text-[10px] font-medium mt-1">내역</span>
+    </a>
+
+    <!-- 가운데 + 버튼 -->
+    <div class="relative -top-6 flex flex-col items-center mx-1">
+      <a
+        routerLink="/add"
+        class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/30 active:scale-95 transition-transform"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="12" x2="12" y1="5" y2="19" />
+          <line x1="5" x2="19" y1="12" y2="12" />
+        </svg>
+      </a>
+    </div>
+
+    <!-- 분석 -->
+    <a
+      routerLink="/analytics"
+      class="flex flex-col items-center justify-center w-14 h-12 transition-colors"
+      [class.text-primary]="isActive('/analytics')"
+      [class.text-text-tertiary]="!isActive('/analytics')"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" x2="18" y1="20" y2="10" />
+        <line x1="12" x2="12" y1="20" y2="4" />
+        <line x1="6" x2="6" y1="20" y2="14" />
+      </svg>
+      <span class="text-[10px] font-medium mt-1">분석</span>
+    </a>
+
+    <!-- 카테고리 -->
+    <a
+      routerLink="/categories"
+      class="flex flex-col items-center justify-center w-14 h-12 transition-colors"
+      [class.text-primary]="isActive('/categories')"
+      [class.text-text-tertiary]="!isActive('/categories')"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"
+        />
+        <path d="M7 7h.01" />
+      </svg>
+      <span class="text-[10px] font-medium mt-1">카테고리</span>
+    </a>
+  </div>
+</nav>
