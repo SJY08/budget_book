@@ -11,6 +11,7 @@ export class BottomNavComponent {
   router = inject(Router);
 
   isActive(path: string) {
-    return this.router.url.includes(path);
+    if (path === '/home') return this.router.url === '/home';
+    return this.router.url.startsWith(path);
   }
 }
