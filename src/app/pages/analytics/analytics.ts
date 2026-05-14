@@ -1,9 +1,19 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  AfterViewInit,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { StoreService } from '../../core/store';
 import { KrwPipe } from '../../shared/pipes/krw-pipe';
 import { CategoryIconComponent } from '../../shared/category-icon/category-icon';
-import { StoreService } from '../../core/store';
-import { getMonthStartEnd, getNextMonth, getPreviousMonth } from '../../core/utils';
+import { getMonthStartEnd, getPreviousMonth, getNextMonth } from '../../core/utils';
+import { MotionService } from '../../core/motion.service';
 
 @Component({
   selector: 'app-analytics',
@@ -11,8 +21,11 @@ import { getMonthStartEnd, getNextMonth, getPreviousMonth } from '../../core/uti
   imports: [RouterLink, KrwPipe, CategoryIconComponent],
   templateUrl: './analytics.html',
 })
-export class AnalyticsComponent {
+export class AnalyticsComponent implements AfterViewInit {
   store = inject(StoreService);
+  motion = inject(MotionService);
+
+  @ViewChildren('card') cards!: QueryList<ElementRef>;
 
   today = new Date();
   currentYear = signal(this.today.getFullYear());
@@ -46,7 +59,6 @@ export class AnalyticsComponent {
       .forEach((t) => {
         totals[t.categoryId] = (totals[t.categoryId] || 0) + t.amount;
       });
-
     return Object.entries(totals)
       .map(([id, amount]) => ({
         category: this.store.getCategoryById(id),
@@ -80,7 +92,6 @@ export class AnalyticsComponent {
       .allTransactions()
       .filter((t) => t.date >= start && t.date <= end && t.type === 'expense')
       .reduce((s, t) => s + t.amount, 0);
-
     if (prevExpense === 0) return this.totalExpense() > 0 ? '지난달엔 지출이 없었어요' : '';
     const pct = Math.round(((this.totalExpense() - prevExpense) / prevExpense) * 100);
     if (pct > 0) return `지난달보다 ${pct}% 더 썼어요`;
@@ -89,6 +100,12 @@ export class AnalyticsComponent {
   });
 
   comparisonPositive = computed(() => this.comparisonText().includes('덜'));
+
+  ngAfterViewInit() {
+    this.cards.forEach((card, i) => {
+      this.motion.fadeUp(card.nativeElement, i * 0.1);
+    });
+  }
 
   prevMonth() {
     const { year, month } = getPreviousMonth(this.currentYear(), this.currentMonth());

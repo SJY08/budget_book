@@ -1,10 +1,19 @@
-import { Component, computed, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  AfterViewInit,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
 import { CategoryIconComponent } from '../../shared/category-icon/category-icon';
 import { KrwPipe } from '../../shared/pipes/krw-pipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StoreService } from '../../core/store';
 import { formatDate } from '../../core/utils';
 import { Transaction } from '../../core/types';
+import { MotionService } from '../../core/motion.service';
 
 @Component({
   selector: 'app-category-detail',
@@ -12,19 +21,19 @@ import { Transaction } from '../../core/types';
   imports: [CategoryIconComponent, KrwPipe],
   templateUrl: './category-detail.html',
 })
-export class CategoryDetailComponent {
+export class CategoryDetailComponent implements AfterViewInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   store = inject(StoreService);
+  motion = inject(MotionService);
+
+  @ViewChildren('card') cards!: QueryList<ElementRef>;
 
   categoryId = this.route.snapshot.paramMap.get('id') ?? '';
-
   category = computed(() => this.store.getCategoryById(this.categoryId));
-
   categoryTransactions = computed(() =>
     this.store.allTransactions().filter((t) => t.categoryId === this.categoryId),
   );
-
   totalAmount = computed(() => this.categoryTransactions().reduce((s, t) => s + t.amount, 0));
 
   chartData = computed(() => {
@@ -46,9 +55,8 @@ export class CategoryDetailComponent {
     const curr = data[5].amount;
     const prev = data[4].amount;
     const isIncome = this.category()?.type === 'income';
-
     if (prev === 0 && curr > 0)
-      return isIncome ? '자난달엔 수입이 없었어요' : '지난달엔 지출이 없었어요';
+      return isIncome ? '지난달엔 수입이 없었어요' : '지난달엔 지출이 없었어요';
     if (prev === 0) return '';
     const pct = Math.round((Math.abs(curr - prev) / prev) * 100);
     if (curr > prev)
@@ -68,7 +76,7 @@ export class CategoryDetailComponent {
 
   groupedTransactions = computed(() => {
     const groups: { date: string; items: Transaction[] }[] = [];
-    this.categoryTransactions().forEach((t) => {
+    this.categoryTransactions().forEach((t: Transaction) => {
       const last = groups[groups.length - 1];
       if (last && last.date === t.date) last.items.push(t);
       else groups.push({ date: t.date, items: [t] });
@@ -76,9 +84,14 @@ export class CategoryDetailComponent {
     return groups;
   });
 
+  ngAfterViewInit() {
+    this.cards.forEach((card, i) => {
+      this.motion.fadeUp(card.nativeElement, i * 0.1);
+    });
+  }
+
   goBack() {
     this.router.navigate(['/categories']);
   }
-
   formatDate = formatDate;
 }

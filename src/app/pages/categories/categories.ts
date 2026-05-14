@@ -1,9 +1,20 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  AfterViewInit,
+  ViewChild,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CategoryIconComponent } from '../../shared/category-icon/category-icon';
+import { FormsModule } from '@angular/forms';
 import { StoreService } from '../../core/store';
+import { CategoryIconComponent } from '../../shared/category-icon/category-icon';
 import { TransactionType } from '../../core/types';
+import { MotionService } from '../../core/motion.service';
 
 const ICON_OPTIONS = [
   'Utensils',
@@ -40,8 +51,14 @@ const COLOR_OPTIONS = [
   imports: [RouterLink, FormsModule, CategoryIconComponent],
   templateUrl: './categories.html',
 })
-export class CategoriesComponent {
+export class CategoriesComponent implements AfterViewInit {
   store = inject(StoreService);
+  motion = inject(MotionService);
+
+  @ViewChild('modal') modalEl!: ElementRef;
+  @ViewChild('header') headerEl!: ElementRef;
+  @ViewChild('addBtn') addBtnEl!: ElementRef;
+  @ViewChildren('catCard') catCards!: QueryList<ElementRef>;
 
   activeTab = signal<TransactionType>('expense');
   isAdding = signal(false);
@@ -56,11 +73,29 @@ export class CategoriesComponent {
     this.store.categories().filter((c) => c.type === this.activeTab()),
   );
 
+  ngAfterViewInit() {
+    this.motion.fadeUp(this.headerEl.nativeElement, 0);
+    this.motion.fadeUp(this.addBtnEl.nativeElement, 0.08);
+    this.catCards.forEach((card, i) => {
+      this.motion.fadeUp(card.nativeElement, 0.12 + i * 0.06);
+    });
+  }
+
   openAdd() {
     this.newName.set('');
     this.newIcon.set('Utensils');
     this.newColor.set('#3182f6');
     this.isAdding.set(true);
+    setTimeout(() => {
+      if (this.modalEl) this.motion.modalIn(this.modalEl.nativeElement);
+    }, 0);
+  }
+
+  async closeAdd() {
+    if (this.modalEl) {
+      await this.motion.modalOut(this.modalEl.nativeElement);
+    }
+    this.isAdding.set(false);
   }
 
   add() {
@@ -75,7 +110,7 @@ export class CategoriesComponent {
   }
 
   deleteCategory(id: string, name: string) {
-    if (confirm(`'${name}' 카테고리를 삭제하시겠습니까 ?`)) {
+    if (confirm(`'${name}' 카테고리를 삭제하시겠습니까?`)) {
       this.store.deleteCategory(id);
     }
   }

@@ -44,7 +44,7 @@
   </div>
 
   <div class="flex-1 overflow-y-auto px-6 py-8 space-y-8">
-    <div class="text-center">
+    <div #section class="text-center">
       <p class="text-text-tertiary mb-3 font-medium">
         {{ type() === 'expense' ? '얼마를 쓰셨나요?' : '얼마를 받으셨나요?' }}
       </p>
@@ -62,7 +62,7 @@
       <p class="text-text-tertiary text-lg font-medium mt-1">원</p>
     </div>
 
-    <div>
+    <div #section>
       <label class="block text-sm font-medium text-text-secondary mb-3">카테고리</label>
       @if (filteredCategories().length === 0) {
         <div class="bg-gray-50 rounded-xl p-6 text-center text-text-tertiary text-sm">
@@ -87,7 +87,7 @@
       }
     </div>
 
-    <div>
+    <div #section>
       <label class="block text-sm font-medium text-text-secondary mb-2">날짜</label>
       <input
         type="date"
@@ -97,7 +97,7 @@
       />
     </div>
 
-    <div>
+    <div #section>
       <label class="block text-sm font-medium text-text-secondary mb-2">메모 (선택)</label>
       <input
         type="text"

@@ -1,11 +1,20 @@
-import { Component, computed, inject, model } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  model,
+  AfterViewInit,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CategoryIconComponent } from '../../shared/category-icon/category-icon';
-import { KrwPipe } from '../../shared/pipes/krw-pipe';
 import { Router } from '@angular/router';
 import { StoreService } from '../../core/store';
 import { TransactionType } from '../../core/types';
 import { getToday } from '../../core/utils';
+import { MotionService } from '../../core/motion.service';
 
 @Component({
   selector: 'app-add-transaction',
@@ -13,9 +22,12 @@ import { getToday } from '../../core/utils';
   imports: [FormsModule, CategoryIconComponent],
   templateUrl: './add-transaction.html',
 })
-export class AddTransactionComponent {
+export class AddTransactionComponent implements AfterViewInit {
   router = inject(Router);
   store = inject(StoreService);
+  motion = inject(MotionService);
+
+  @ViewChildren('section') sections!: QueryList<ElementRef>;
 
   type = model<TransactionType>('expense');
   amountStr = model('');
@@ -24,10 +36,15 @@ export class AddTransactionComponent {
   memo = model('');
 
   amount = computed(() => parseInt(this.amountStr().replace(/[^0-9]/g, ''), 10) || 0);
-
   filteredCategories = computed(() =>
     this.store.categories().filter((c) => c.type === this.type()),
   );
+
+  ngAfterViewInit() {
+    this.sections.forEach((section, i) => {
+      this.motion.fadeUp(section.nativeElement, i * 0.1);
+    });
+  }
 
   handleTypeChange(newType: TransactionType) {
     this.type.set(newType);

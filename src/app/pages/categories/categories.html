@@ -1,8 +1,7 @@
 <div class="flex flex-col min-h-full bg-background pb-20">
-  <div class="bg-surface px-6 pt-12 pb-4 rounded-b-3xl shadow-sm sticky top-0 z-10">
+  <div #header class="bg-surface px-6 pt-12 pb-4 rounded-b-3xl shadow-sm sticky top-0 z-10">
     <h1 class="text-2xl font-bold text-text-primary">카테고리 관리</h1>
     <p class="text-text-secondary mt-1 mb-5">지출과 수입을 분류할 카테고리를 설정하세요.</p>
-
     <div class="flex bg-gray-100 rounded-lg p-1">
       <button
         (click)="activeTab.set('expense')"
@@ -29,6 +28,7 @@
 
   <div class="p-5 space-y-4">
     <button
+      #addBtn
       (click)="openAdd()"
       class="w-full bg-white border-2 border-dashed border-gray-200 rounded-2xl p-4 flex items-center justify-center gap-2 text-text-secondary hover:border-primary hover:text-primary transition-colors"
     >
@@ -53,6 +53,7 @@
     <div class="grid grid-cols-2 gap-4">
       @for (cat of filteredCategories(); track cat.id) {
         <div
+          #catCard
           class="bg-surface rounded-2xl p-5 shadow-soft flex flex-col items-center text-center relative"
         >
           <a [routerLink]="['/category', cat.id]" class="flex flex-col items-center">
@@ -85,11 +86,12 @@
 
   @if (isAdding()) {
     <div
-      class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm"
-      (click)="isAdding.set(false)"
+      class="fixed inset-0 z-50 flex items-end justify-center bg-black/40 backdrop-blur-sm"
+      (click)="closeAdd()"
     >
       <div
-        class="bg-surface w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 max-h-[90vh] overflow-y-auto animate-slide-up"
+        #modal
+        class="bg-surface w-full max-w-md rounded-t-3xl p-6 max-h-[90vh] overflow-y-auto"
         (click)="$event.stopPropagation()"
       >
         <div class="flex justify-between items-center mb-6">
@@ -99,10 +101,7 @@
               {{ activeTab() === 'expense' ? '지출' : '수입' }} 카테고리
             </p>
           </div>
-          <button
-            (click)="isAdding.set(false)"
-            class="p-2 bg-gray-100 rounded-full text-text-secondary"
-          >
+          <button (click)="closeAdd()" class="p-2 bg-gray-100 rounded-full text-text-secondary">
             <svg
               width="20"
               height="20"

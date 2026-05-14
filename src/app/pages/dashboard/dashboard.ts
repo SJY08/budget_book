@@ -1,20 +1,40 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal,
+  ElementRef,
+  AfterViewInit,
+  ViewChildren,
+  QueryList,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TransactionItemComponent } from '../../shared/transaction-item/transaction-item';
 import { KrwPipe } from '../../shared/pipes/krw-pipe';
 import { CategoryIconComponent } from '../../shared/category-icon/category-icon';
 import { StoreService } from '../../core/store';
-import { formatDate, getMonthStartEnd, getNextMonth, getPreviousMonth } from '../../core/utils';
+import { getMonthStartEnd, getNextMonth, getPreviousMonth, formatDate } from '../../core/utils';
 import { Transaction } from '../../core/types';
+import { MotionService } from '../../core/motion.service';
+import { MotionFadeDirective } from '../../core/motion.directive';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink, TransactionItemComponent, KrwPipe, CategoryIconComponent],
+  imports: [
+    RouterLink,
+    TransactionItemComponent,
+    KrwPipe,
+    CategoryIconComponent,
+    MotionFadeDirective,
+  ],
   templateUrl: './dashboard.html',
 })
-export class DashboardComponent {
+export class DashboardComponent implements AfterViewInit {
   store = inject(StoreService);
+  motion = inject(MotionService);
+
+  @ViewChildren('card') cards!: QueryList<ElementRef>;
 
   today = new Date();
   currentYear = signal(this.today.getFullYear());
@@ -67,6 +87,12 @@ export class DashboardComponent {
     });
     return groups;
   });
+
+  ngAfterViewInit() {
+    this.cards.forEach((card, i) => {
+      this.motion.fadeUp(card.nativeElement, i * 0.08);
+    });
+  }
 
   prevMonth() {
     const { year, month } = getPreviousMonth(this.currentYear(), this.currentMonth());

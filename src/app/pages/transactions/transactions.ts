@@ -1,9 +1,18 @@
-import { Component, computed, inject } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  AfterViewInit,
+  ViewChildren,
+  QueryList,
+  ElementRef,
+} from '@angular/core';
+import { StoreService } from '../../core/store';
 import { TransactionItemComponent } from '../../shared/transaction-item/transaction-item';
 import { KrwPipe } from '../../shared/pipes/krw-pipe';
-import { StoreService } from '../../core/store';
-import { Transaction } from '../../core/types';
 import { formatDate } from '../../core/utils';
+import { Transaction } from '../../core/types';
+import { MotionService } from '../../core/motion.service';
 
 @Component({
   selector: 'app-transactions',
@@ -11,8 +20,11 @@ import { formatDate } from '../../core/utils';
   imports: [TransactionItemComponent, KrwPipe],
   templateUrl: './transactions.html',
 })
-export class TransactionsComponent {
+export class TransactionsComponent implements AfterViewInit {
   store = inject(StoreService);
+  motion = inject(MotionService);
+
+  @ViewChildren('card') cards!: QueryList<ElementRef>;
 
   groupedTransactions = computed(() => {
     const groups: { date: string; items: Transaction[]; dayTotal: number }[] = [];
@@ -31,6 +43,12 @@ export class TransactionsComponent {
     });
     return groups;
   });
+
+  ngAfterViewInit() {
+    this.cards.forEach((card, i) => {
+      this.motion.fadeUp(card.nativeElement, i * 0.08);
+    });
+  }
 
   deleteTransaction(id: string) {
     if (confirm('이 내역을 삭제하시겠습니까?')) {

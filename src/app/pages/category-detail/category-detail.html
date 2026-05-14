@@ -5,7 +5,7 @@
   </div>
 } @else {
   <div class="flex flex-col min-h-full bg-background pb-20">
-    <div class="bg-surface px-4 pt-4 pb-6 rounded-b-3xl shadow-sm z-10">
+    <div #card class="bg-surface px-4 pt-4 pb-6 rounded-b-3xl shadow-sm z-10">
       <button (click)="goBack()" class="p-2 -ml-2 mb-4 text-text-primary">
         <svg
           width="28"
@@ -31,7 +31,7 @@
           <div class="flex items-center gap-2">
             <h1 class="text-2xl font-bold text-text-primary">{{ category()!.name }}</h1>
             <span
-              class="text-xs font-medium px-2 py-0.5 rounded-full"
+              class="text-xs text-white font-medium px-2 py-0.5 rounded-full"
               [class.bg-success]="category()!.type === 'income'"
               [class.text-success]="category()!.type === 'income'"
               [class.bg-danger]="category()!.type === 'expense'"
@@ -46,8 +46,8 @@
       </div>
     </div>
 
-    <div class="p-5 space-y-6">
-      <div class="bg-surface rounded-2xl p-5 shadow-soft">
+    <div #card class="p-5 space-y-6">
+      <div #card class="bg-surface rounded-2xl p-5 shadow-soft">
         <h3 class="font-bold text-text-primary mb-1">최근 6개월 추이</h3>
         @if (comparisonText()) {
           <p class="text-sm font-medium mb-6" [class]="comparisonColor()">
@@ -73,7 +73,7 @@
         </div>
       </div>
 
-      <div class="bg-surface rounded-2xl p-5 shadow-soft">
+      <div #card class="bg-surface rounded-2xl p-5 shadow-soft">
         <h3 class="font-bold text-text-primary mb-4">상세 내역</h3>
 
         @if (groupedTransactions().length === 0) {

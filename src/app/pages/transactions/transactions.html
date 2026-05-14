@@ -11,11 +11,9 @@
       </div>
     } @else {
       @for (group of groupedTransactions(); track group.date) {
-        <div class="bg-surface rounded-2xl p-5 shadow-soft">
+        <div #card class="bg-surface rounded-2xl p-5 shadow-soft">
           <div class="flex justify-between items-center mb-4 border-b border-gray-100 pb-3">
-            <h3 class="font-bold text-text-secondary text-sm">
-              {{ formatDate(group.date) }}
-            </h3>
+            <h3 class="font-bold text-text-secondary text-sm">{{ formatDate(group.date) }}</h3>
             <span
               class="text-sm font-bold"
               [class.text-success]="group.dayTotal > 0"
@@ -24,7 +22,6 @@
               {{ group.dayTotal > 0 ? '+' : '' }}{{ group.dayTotal | krw }}
             </span>
           </div>
-
           <div class="space-y-4">
             @for (t of group.items; track t.id) {
               @if (store.getCategoryById(t.categoryId); as cat) {

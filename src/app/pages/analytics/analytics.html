@@ -1,5 +1,5 @@
 <div class="flex flex-col min-h-full bg-background pb-8">
-  <div class="bg-surface px-6 pt-12 pb-6 rounded-b-3xl shadow-sm sticky top-0 z-10">
+  <div #card class="bg-surface px-6 pt-12 pb-6 rounded-b-3xl shadow-sm sticky top-0 z-10">
     <h1 class="text-2xl font-bold text-text-primary mb-1">분석</h1>
     <p class="text-text-secondary mb-5">지출 흐름과 카테고리를 한눈에 확인하세요.</p>
 
@@ -37,7 +37,7 @@
   </div>
 
   <div class="p-5 space-y-6">
-    <div class="grid grid-cols-2 gap-3">
+    <div #card class="grid grid-cols-2 gap-3">
       <div class="bg-surface rounded-2xl p-4 shadow-soft">
         <div class="flex items-center gap-1.5 text-text-secondary text-xs font-medium mb-1">
           <svg
@@ -82,7 +82,7 @@
       </div>
     </div>
 
-    <div class="bg-surface rounded-2xl p-5 shadow-soft">
+    <div #card class="bg-surface rounded-2xl p-5 shadow-soft">
       <h3 class="font-bold text-text-primary mb-1">최근 6개월 지출 추이</h3>
       @if (comparisonText()) {
         <p
@@ -111,7 +111,7 @@
     </div>
 
     @if (expenseByCategory().length > 0) {
-      <div class="bg-surface rounded-2xl p-5 shadow-soft">
+      <div #card class="bg-surface rounded-2xl p-5 shadow-soft">
         <h3 class="font-bold text-text-primary mb-4">카테고리별 지출</h3>
 
         <div class="space-y-4">
