@@ -15,6 +15,7 @@ import { StoreService } from '../../core/store';
 import { CategoryIconComponent } from '../../shared/category-icon/category-icon';
 import { TransactionType } from '../../core/types';
 import { MotionService } from '../../core/motion.service';
+import { SwipeDirective } from '../../core/swipe.directive';
 
 const ICON_OPTIONS = [
   'Utensils',
@@ -48,7 +49,7 @@ const COLOR_OPTIONS = [
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [RouterLink, FormsModule, CategoryIconComponent],
+  imports: [RouterLink, FormsModule, CategoryIconComponent, SwipeDirective],
   templateUrl: './categories.html',
 })
 export class CategoriesComponent implements AfterViewInit {
@@ -58,9 +59,11 @@ export class CategoriesComponent implements AfterViewInit {
   @ViewChild('modal') modalEl!: ElementRef;
   @ViewChild('header') headerEl!: ElementRef;
   @ViewChild('addBtn') addBtnEl!: ElementRef;
+  @ViewChild('tabContent') tabContentEl!: ElementRef;
   @ViewChildren('catCard') catCards!: QueryList<ElementRef>;
 
   activeTab = signal<TransactionType>('expense');
+  swipeDir = signal<'left' | 'right' | null>(null);
   isAdding = signal(false);
   newName = signal('');
   newIcon = signal('Utensils');
@@ -81,6 +84,21 @@ export class CategoriesComponent implements AfterViewInit {
     });
   }
 
+  switchTab(tab: TransactionType, dir: 'left' | 'right') {
+    if (this.activeTab() === tab) return;
+    this.swipeDir.set(dir);
+    this.activeTab.set(tab);
+    setTimeout(() => this.swipeDir.set(null), 300);
+  }
+
+  onSwipeLeft() {
+    if (this.activeTab() === 'expense') this.switchTab('income', 'left');
+  }
+
+  onSwipeRight() {
+    if (this.activeTab() === 'income') this.switchTab('expense', 'right');
+  }
+
   openAdd() {
     this.newName.set('');
     this.newIcon.set('Utensils');
@@ -92,9 +110,7 @@ export class CategoriesComponent implements AfterViewInit {
   }
 
   async closeAdd() {
-    if (this.modalEl) {
-      await this.motion.modalOut(this.modalEl.nativeElement);
-    }
+    if (this.modalEl) await this.motion.modalOut(this.modalEl.nativeElement);
     this.isAdding.set(false);
   }
 

@@ -1,24 +1,29 @@
-<div class="flex flex-col min-h-full bg-background pb-20">
+<div
+  class="flex flex-col min-h-full bg-background pb-20"
+  swipeable
+  (swipeLeft)="onSwipeLeft()"
+  (swipeRight)="onSwipeRight()"
+>
   <div #header class="bg-surface px-6 pt-12 pb-4 rounded-b-3xl shadow-sm sticky top-0 z-10">
     <h1 class="text-2xl font-bold text-text-primary">카테고리 관리</h1>
     <p class="text-text-secondary mt-1 mb-5">지출과 수입을 분류할 카테고리를 설정하세요.</p>
     <div class="flex bg-gray-100 rounded-lg p-1">
       <button
-        (click)="activeTab.set('expense')"
+        (click)="switchTab('expense', 'right')"
         [class]="
           activeTab() === 'expense'
-            ? 'flex-1 py-2 rounded-md text-sm font-medium bg-white shadow-sm text-danger transition-colors'
-            : 'flex-1 py-2 rounded-md text-sm font-medium text-text-secondary transition-colors'
+            ? 'flex-1 py-2 rounded-md text-sm font-medium bg-white shadow-sm text-danger transition-all'
+            : 'flex-1 py-2 rounded-md text-sm font-medium text-text-secondary transition-all'
         "
       >
         지출
       </button>
       <button
-        (click)="activeTab.set('income')"
+        (click)="switchTab('income', 'left')"
         [class]="
           activeTab() === 'income'
-            ? 'flex-1 py-2 rounded-md text-sm font-medium bg-white shadow-sm text-success transition-colors'
-            : 'flex-1 py-2 rounded-md text-sm font-medium text-text-secondary transition-colors'
+            ? 'flex-1 py-2 rounded-md text-sm font-medium bg-white shadow-sm text-success transition-all'
+            : 'flex-1 py-2 rounded-md text-sm font-medium text-text-secondary transition-all'
         "
       >
         수입
@@ -50,7 +55,17 @@
       >
     </button>
 
-    <div class="grid grid-cols-2 gap-4">
+    <!-- 탭 콘텐츠 애니메이션 -->
+    <div
+      #tabContent
+      [class]="
+        swipeDir() === 'left'
+          ? 'grid grid-cols-2 gap-4 tab-slide-left'
+          : swipeDir() === 'right'
+            ? 'grid grid-cols-2 gap-4 tab-slide-right'
+            : 'grid grid-cols-2 gap-4'
+      "
+    >
       @for (cat of filteredCategories(); track cat.id) {
         <div
           #catCard
