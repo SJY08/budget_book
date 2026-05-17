@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { BottomNavComponent } from './shared/bottom-nav/bottom-nav';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs';
@@ -19,6 +19,10 @@ export class App implements OnInit {
   }
 
   ngOnInit() {
+    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe(() => {
+      document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
     if (!this.swUpdate?.isEnabled) return;
 
     this.swUpdate.versionUpdates
