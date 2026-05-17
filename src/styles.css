@@ -26,3 +26,34 @@
     background: transparent;
   }
 }
+
+@keyframes tab-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes tab-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@layer utilities {
+  .tab-slide-left {
+    animation: tab-slide-left 0.25s ease both;
+  }
+  .tab-slide-right {
+    animation: tab-slide-right 0.25s ease both;
+  }
+}
